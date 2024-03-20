@@ -56,36 +56,31 @@ pipeline {
 
 		stage('Sonar Scan') {
 			steps {
-sh 'mvn clean verify sonar:sonar \
-			    -Dsonar.login=1ff462f03228674e3a684569d716aad1aff286bb \
-			    -Dsonar.host.url=https://sonarcloud.io \
-			    -Dsonar.organization=riyapulusuganti \
-			    -Dsonar.projectKey=riyapulusuganti_Demo'
-				//sonarSummaries()
+				sonarSummaries()
 			}
 		}
 
 		stage('Security Scan') {
 			steps {
 				echo "Running Security step ..."
-				//snDevOpsSecurityResult securityResultAttributes: '{"scanner": "Veracode", "applicationName": "${env.VERACODE_APPLICATION_NAME}"}'
+				snDevOpsSecurityResult securityResultAttributes: '{"scanner": "Veracode", "applicationName": "${env.VERACODE_APPLICATION_NAME}"}'
 			}
 		}
 		
 	}
-	post{
-		success{
-			script{
-				echo "${releasePipelineName}"
-				build job: "${releasePipelineName}"
-				
-			}
-		}
-	}
+	//post{
+	//	success{
+	//		script{
+	//			echo "${releasePipelineName}"
+	//			build job: "${releasePipelineName}"
+	//			
+	//		}
+	//	}
+	//}
 }
 
 def sonarSummaries() {
-	withSonarQubeEnv('sonarcloud.io'){
+	//withSonarQubeEnv('sonarcloud.io'){
 	   if(fileExists("sonar-project.properties")) {
 			sh '${SCANNER_HOME}/bin/sonar-scanner'
 		} else {
@@ -95,5 +90,5 @@ def sonarSummaries() {
 			    -Dsonar.organization=riyapulusuganti \
 			    -Dsonar.projectKey=riyapulusuganti_Demo'
 		}
-	}
+	//}
 }
