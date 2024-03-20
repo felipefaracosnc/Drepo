@@ -18,7 +18,7 @@ pipeline {
 	} 
 
 	stages {
-        
+
 		stage('Build') {
 			steps {
 				sh 'mvn -B -DskipTests clean compile'
@@ -28,7 +28,6 @@ pipeline {
 		stage('Test') {
 			steps {
 			  	sh 'mvn test'
-				sleep(5);
 			}
 			post {
 				always {
@@ -56,9 +55,6 @@ pipeline {
 		}
 
 		stage('Sonar Scan') {
-            		tools {
-                		jdk "Jdk17"
-           		}
 			steps {
 				sonarSummaries()
 			}
@@ -96,17 +92,3 @@ def sonarSummaries() {
 		}
 	}
 }
-
-// stage('SonarQube analysis') {
-//     tools {
-//         jdk "Jdk17" // the name you have given the JDK installation in Global Tool Configuration
-//     }
-//     environment {
-//         scannerHome = tool 'SonarQube Scanner' // the name you have given the Sonar Scanner (in Global Tool Configuration)
-//     }
-//     steps {
-//         withSonarQubeEnv(installationName: 'SonarQube') {
-//             sh "${scannerHome}/bin/sonar-scanner -X"
-//         }
-//     }
-// }
