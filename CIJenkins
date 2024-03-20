@@ -80,7 +80,7 @@ pipeline {
 }
 
 def sonarSummaries() {
-	//withSonarQubeEnv('sonarcloud.io'){
+	withSonarQubeEnv('sonarcloud.io'){
 	   if(fileExists("sonar-project.properties")) {
 			sh '${SCANNER_HOME}/bin/sonar-scanner'
 		} else {
@@ -90,5 +90,5 @@ def sonarSummaries() {
 			    -Dsonar.organization=riyapulusuganti \
 			    -Dsonar.projectKey=riyapulusuganti_Demo'
 		}
-	//}
+	}
 }
