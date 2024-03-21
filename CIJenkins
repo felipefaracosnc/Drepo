@@ -38,19 +38,29 @@ pipeline {
 
 		stage('Register Artifact') {
 			steps {
-				snDevOpsArtifact(artifactsPayload: """
-				{
-				"artifacts":
-				[
-				    {
-				        "name": "${artifactname}",
-				        "version": "${version}",
-				        "semanticVersion": "${semanticVersion}",
-				        "repositoryName": "${repoName}"
-				    }
-				],
-				"branchName": "main"
-				}""")
+		def server = Artifactory.server 'JFrog1'
+                def uploadSpec = """{
+                   "files": [{
+                      "pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
+		      "regexp": "true"
+                   }]
+                }"""
+
+             def buildInfo = server.upload(uploadSpec) 
+             server.publishBuildInfo buildInfo
+				//snDevOpsArtifact(artifactsPayload: """
+				//{
+				//"artifacts":
+				//[
+				//    {
+				//        "name": "${artifactname}",
+				//        "version": "${version}",
+				//        "semanticVersion": "${semanticVersion}",
+				//        "repositoryName": "${repoName}"
+				//    }
+				//],
+				//"branchName": "main"
+				//}""")
 			}     
 		}
 
