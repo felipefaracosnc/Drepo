@@ -46,7 +46,7 @@ pipeline {
 							      "regexp": "true"
 					                   }]
 					                }"""
-					def artifactoryBuildInfo = server.upload(artifactoryUploadSpec) 
+					def artifactoryBuildInfo = artifactoryServer.upload(artifactoryUploadSpec) 
 					artifactoryServer.publishBuildInfo artifactoryBuildInfo
 				}
 				//snDevOpsArtifact(artifactsPayload: """
