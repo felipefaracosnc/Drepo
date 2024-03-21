@@ -3,6 +3,14 @@ def version = "1.${BUILD_NUMBER}"
 def semanticVersion = "1.${BUILD_NUMBER}.0"
 def repoName = "riyapulusuganti/Drepo" // Ensure after forking update the repoName accrodingly.
 def releasePipelineName = "CDRiyaScripted" //Ensure you enter the correct release pipeline name that you have created in Jenkins
+def artifactoryServer = Artifactory.server 'JFrog1'
+def artifactoryUploadSpec = """{
+                   "files": [{
+                      "pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
+		      "regexp": "true"
+                   }]
+                }"""
+def artifactoryBuildInfo = server.upload(artifactoryUploadSpec) 
 
 pipeline {
 	agent any
@@ -38,7 +46,7 @@ pipeline {
 
 		stage('Register Artifact') {
 			steps {
-				artifactoryUpload()
+				artifactoryServer.publishBuildInfo artifactoryBuildInfo
 				//snDevOpsArtifact(artifactsPayload: """
 				//{
 				//"artifacts":
@@ -78,19 +86,6 @@ pipeline {
 	//		}
 	//	}
 	//}
-}
-
-def artifactoryUpload() {
-	def server = Artifactory.server 'JFrog1'
-                def uploadSpec = """{
-                   "files": [{
-                      "pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
-		      "regexp": "true"
-                   }]
-                }"""
-
-        def buildInfo = server.upload(uploadSpec) 
-        server.publishBuildInfo buildInfo
 }
 
 def sonarSummaries() {
