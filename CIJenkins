@@ -38,16 +38,7 @@ pipeline {
 
 		stage('Register Artifact') {
 			steps {
-		def server = Artifactory.server 'JFrog1'
-                def uploadSpec = """{
-                   "files": [{
-                      "pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
-		      "regexp": "true"
-                   }]
-                }"""
-
-             def buildInfo = server.upload(uploadSpec) 
-             server.publishBuildInfo buildInfo
+				artifactoryUpload()
 				//snDevOpsArtifact(artifactsPayload: """
 				//{
 				//"artifacts":
@@ -87,6 +78,19 @@ pipeline {
 	//		}
 	//	}
 	//}
+}
+
+def artifactoryUpload() {
+	def server = Artifactory.server 'JFrog1'
+                def uploadSpec = """{
+                   "files": [{
+                      "pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
+		      "regexp": "true"
+                   }]
+                }"""
+
+        def buildInfo = server.upload(uploadSpec) 
+        server.publishBuildInfo buildInfo
 }
 
 def sonarSummaries() {
