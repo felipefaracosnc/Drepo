@@ -43,6 +43,7 @@ pipeline {
 					def artifactoryUploadSpec = """{
 					                   "files": [{
 					                      "pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
+							      "target": "felipe-repo/",
 							      "regexp": "true"
 					                   }]
 					                }"""
