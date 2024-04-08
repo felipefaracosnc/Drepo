@@ -1,3 +1,4 @@
+def packageName = "MyService"
 def artifactname = "app-devops-artifact-ci.jar"
 def version = "1.${BUILD_NUMBER}"
 def semanticVersion = "1.${BUILD_NUMBER}.0"
@@ -43,53 +44,63 @@ pipeline {
 					def artifactoryServer = Artifactory.server 'JFrog1'
 					def artifactoryUploadSpec = """{
 					                   "files": [{
-					                      "pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
-							      "target": "felipe-repo/",
-							      "regexp": "true"
+					                      	"pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
+							      			"target": "felipe-repo/",
+							     		 	"regexp": "true"
 					                   }]
 					                }"""
 					def artifactoryBuildInfo = artifactoryServer.upload(artifactoryUploadSpec) 
 					artifactoryServer.publishBuildInfo artifactoryBuildInfo
 				}
-				//snDevOpsArtifact(artifactsPayload: """
-				//{
-				//"artifacts":
-				//[
-				//    {
-				//        "name": "${artifactname}",
-				//        "version": "${version}",
-				//        "semanticVersion": "${semanticVersion}",
-				//        "repositoryName": "${repoName}"
-				//    }
-				//],
-				//"branchName": "main"
-				//}""")
+				snDevOpsArtifact(artifactsPayload: """
+				{
+				"artifacts":
+				[
+				   {
+				       "name": "${artifactname}",
+				       "version": "${version}",
+				       "semanticVersion": "${semanticVersion}",
+				       "repositoryName": "${repoName}"
+				   }
+				]
+				}""")
 			}     
 		}
 
-		stage('Sonar Scan') {
-			steps {
-				sonarSummaries()
-			}
+		stage('Register Package') {
+				steps {
+					snDevOpsPackage(
+					name: "${packageName}",
+					artifactsPayload: """
+					{
+					    "artifacts":
+					    [
+						{
+						    "name": "${artifactname}",
+						    "version": "${version}",
+						    "semanticVersion": "${semanticVersion}",
+						    "repositoryName": "${repoName}"
+						}
+					    ]
+					}""")
+				}
 		}
 
-		stage('Security Scan') {
-			steps {
-				echo "Running Security step ..."
-				snDevOpsSecurityResult securityResultAttributes: '{"scanner": "Veracode", "applicationName": "${env.VERACODE_APPLICATION_NAME}"}'
-			}
-		}
+		// stage('Sonar Scan') {
+		// 	steps {
+		// 		sonarSummaries()
+		// 	}
+		// }
+
+		// stage('Security Scan') {
+		// 	steps {
+		// 		echo "Running Security step ..."
+		// 		snDevOpsSecurityResult securityResultAttributes: '{"scanner": "Veracode", "applicationName": "${env.VERACODE_APPLICATION_NAME}"}'
+		// 	}
+		// }
 		
 	}
-	//post{
-	//	success{
-	//		script{
-	//			echo "${releasePipelineName}"
-	//			build job: "${releasePipelineName}"
-	//			
-	//		}
-	//	}
-	//}
+
 }
 
 def sonarSummaries() {
