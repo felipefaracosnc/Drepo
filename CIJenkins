@@ -23,6 +23,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				error("Force fail")
+				echo 'abc'
 				sh 'mvn -B -DskipTests clean install'
 			}
 		}
