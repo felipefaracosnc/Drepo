@@ -40,18 +40,18 @@ pipeline {
 
 		stage('Register Artifact') {
 			steps {
-				script {
-					def artifactoryServer = Artifactory.server 'JFrog1'
-					def artifactoryUploadSpec = """{
-					                   "files": [{
-					                      	"pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
-							      			"target": "felipe-repo/",
-							     		 	"regexp": "true"
-					                   }]
-					                }"""
-					def artifactoryBuildInfo = artifactoryServer.upload(artifactoryUploadSpec) 
-					artifactoryServer.publishBuildInfo artifactoryBuildInfo
-				}
+				//script {
+				//	def artifactoryServer = Artifactory.server 'JFrog1'
+				//	def artifactoryUploadSpec = """{
+				//	                   "files": [{
+				//	                      	"pattern": "${env.WORKSPACE}/target/DemoMavenProject.*.jar",
+				//			      			"target": "felipe-repo/",
+				//			     		 	"regexp": "true"
+				//	                   }]
+				//	                }"""
+				//	def artifactoryBuildInfo = artifactoryServer.upload(artifactoryUploadSpec) 
+				//	artifactoryServer.publishBuildInfo artifactoryBuildInfo
+				//}
 				snDevOpsArtifact(artifactsPayload: """
 				{
 				"artifacts":
@@ -67,24 +67,24 @@ pipeline {
 			}     
 		}
 
-		stage('Register Package') {
-				steps {
-					snDevOpsPackage(
-					name: "${packageName}",
-					artifactsPayload: """
-					{
-					    "artifacts":
-					    [
-						{
-						    "name": "${artifactname}",
-						    "version": "${version}",
-						    "semanticVersion": "${semanticVersion}",
-						    "repositoryName": "${repoName}"
-						}
-					    ]
-					}""")
-				}
-		}
+		//stage('Register Package') {
+		//		steps {
+		//			snDevOpsPackage(
+		//			name: "${packageName}",
+		//			artifactsPayload: """
+		//			{
+		//			    "artifacts":
+		//			    [
+		//				{
+		//				    "name": "${artifactname}",
+		//				    "version": "${version}",
+		//				    "semanticVersion": "${semanticVersion}",
+		//				    "repositoryName": "${repoName}"
+		//				}
+		//			    ]
+		//			}""")
+		//		}
+		//}
 
 		// stage('Sonar Scan') {
 		// 	steps {
