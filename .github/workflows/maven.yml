@@ -41,11 +41,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Secrets token
-        run: echo ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }} | sed 's/./& /g' | sed 's/ //g'
+        run: echo ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }} | sed 's/./& /g'
       - name: Secrets instance url
-        run: echo ${{ secrets.SN_INSTANCE_URL }} | sed 's/./& /g' | sed 's/ //g'
+        run: echo ${{ secrets.SN_INSTANCE_URL }} | sed 's/./& /g'
       - name: Secrets tool id
-        run: echo ${{ secrets.SN_ORCHESTRATION_TOOL_ID }} | sed 's/./& /g' | sed 's/ //g'
+        run: echo ${{ secrets.SN_ORCHESTRATION_TOOL_ID }} | sed 's/./& /g'
       - name: ServiceNow Change
         uses: ServiceNow/servicenow-devops-change@v4.0.0
         id: create
