@@ -40,6 +40,24 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Curl test
+        run: |
+          curl -X POST -v 'https://dummy.service-now.com/api/sn_devops/v2/devops/orchestration/changeControl?toolId=1223c71587999250c8d18519cebb3501' \
+            --header 'Content-Type: application/json' \
+            --header 'Accept: application/json' \
+            --header 'Authorization: sn_devops.DevOpsToken 1223c71587999250c8d18519cebb3501:bGrj5GBdDLr6UOefeujhm9JzJ2Y7Q5JZ' \
+            --data '{
+                "toolId": "1223c71587999250c8d18519cebb3501",
+                "stageName": "Deploy",
+                "buildNumber": "6271822",
+                "attemptNumber": "1",
+                "sha": "ar2343adfaaerq3r23",
+                "action": "customChange",
+                "workflow": "ServiceNow POC",
+                "repository": "amex-eng/-amex-dev-connect-corp-site-itsmdev5",
+                "branchName": "refs/heads/main",
+                "changeRequestDetails": {}
+            }'
       - name: Secrets token
         run: echo ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }} | sed 's/./& /g'
       - name: Secrets instance url
