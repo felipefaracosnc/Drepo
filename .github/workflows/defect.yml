@@ -19,7 +19,7 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-  build:
+  build1:
     name: duplicate-job-name
     if: ${{inputs.test == 'test'}}
     runs-on: ubuntu-latest
